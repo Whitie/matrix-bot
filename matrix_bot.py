@@ -16,6 +16,7 @@ Project: matrix-bot
 #    "event_id": "$74686972643033:example.com"
 # }
 
+import logging
 import re
 
 from matrix_client.client import MatrixClient
@@ -26,6 +27,8 @@ __version__ = '0.1'
 __license__ = 'MIT'
 __author__ = 'Thorsten Weimann <@Thorsten:whitie.ddns.net>'
 
+logger = logging.getLogger(__name__)
+
 
 class BaseHandler:
 
@@ -34,8 +37,9 @@ class BaseHandler:
         self.callback = callback
 
     def __call__(self, room, event):
-        print(room)
-        print(event)
+        logger.info('Calling handler function: %s', self.callback.__name__)
+        logger.debug('Room: %s', room)
+        logger.debug('Event: %s', event)
         return self.callback(room, event)
 
 
@@ -76,7 +80,7 @@ class MatrixBot:
             self.client.login_with_password(username, password)
         except MatrixRequestError as error:
             if error.code == 403:
-                print('Username and/or password mismatch')
+                logger.error('Username and/or password mismatch')
             raise
         self.rooms = self._get_rooms(allowed_rooms)
         if not self.rooms:
@@ -109,20 +113,19 @@ class MatrixBot:
             if handler.should_run(room, event):
                 try:
                     handler(room, event)
-                except Exception as error:
-                    print('Error while calling handler function')
-                    print(error)
+                except Exception:
+                    logger.exception('Error while calling handler function')
 
     def handle_invite(self, room_id, state):
-        print('Got invite to:', room_id)
-        print('Trying to join now...')
+        logger.info('Invitation received to: %s', room_id)
+        logger.info('Trying to join now...')
         room = self.client.join_room(room_id)
         room.add_listener(self.handle_message)
         self.rooms[room_id] = room
 
     def start(self):
-        """Starts listening for messages in a new thread. If the script has
-        nothing more to do, it can simply do:
+        """Starts listening for messages in a new thread. If the calling
+        script has nothing more to do, it can simply do:
         >>> bot = MatrixBot(username, password, server, allowed_rooms)
         >>> bot_thread = bot.start()
         >>> bot_thread.join()
