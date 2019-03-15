@@ -28,6 +28,7 @@ __license__ = 'MIT'
 __author__ = 'Thorsten Weimann <@Thorsten:whitie.ddns.net>'
 
 logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class BaseHandler:
