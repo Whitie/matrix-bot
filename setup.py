@@ -3,22 +3,22 @@
 
 from setuptools import setup
 
-import matrix_bot
+import matrix_pybot
 
 
 setup(
     name='matrix-pybot',
-    version=matrix_bot.__version__,
+    version=matrix_pybot.__version__,
     description='One file library to create matrix bots (https://matrix.org).',
-    long_description=matrix_bot.__doc__,
+    long_description=matrix_pybot.__doc__,
     long_description_content_type='text/markdown',
-    author=matrix_bot.__author__,
+    author=matrix_pybot.__author__,
     author_email='weimann.th@yahoo.com',
     url='https://github.com/whitie/matrix-bot',
     py_modules='matrix_pybot',
     scripts=['matrix_pybot.py'],
     install_requires=['matrix-client'],
-    license=matrix_bot.__license__,
+    license=matrix_pybot.__license__,
     platforms='any',
     keywords='python matrix matrix.org bot matrix-python',
     classifiers=[
