@@ -75,6 +75,7 @@ class MatrixBot:
         self._username_re = re.compile('@{}'.format(re.escape(username)), re.I)
         self.server = server
         self.handlers = []
+        self.rooms = {}
         self.client = MatrixClient(server)
         try:
             self.client.login_with_password(username, password)
@@ -82,20 +83,23 @@ class MatrixBot:
             if error.code == 403:
                 logger.error('Username and/or password mismatch')
             raise
-        self.rooms = self._get_rooms(allowed_rooms)
+        self._join_rooms(allowed_rooms)
         if not self.rooms:
+            logger.info('No rooms given, listening for invitations')
             self.client.add_invite_listener(self.handle_invite)
             for room_id, room in self.client.rooms.items():
                 room.add_listener(self.handle_message)
-                self.rooms[room_id] = room
+                self._add_room(room_id, room)
 
-    def _get_rooms(self, room_ids):
-        rooms = {}
+    def _add_room(self, room_id, room):
+        logger.debug('Adding room (ID: %s): %s', room_id, room)
+        self.rooms[room_id] = room
+
+    def _join_rooms(self, room_ids):
         for room_id in room_ids:
             room = self.client.join_room(room_id)
             room.add_listener(self.handle_message)
-            rooms[room_id] = room
-        return rooms
+            self._add_room(room_id, room)
 
     def send(self, msg, room_ids=None):
         rooms = room_ids or self.rooms.keys()
