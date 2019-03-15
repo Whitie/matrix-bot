@@ -7,7 +7,7 @@ import matrix_bot
 
 
 setup(
-    name='matrix-bot',
+    name='matrix-pybot',
     version=matrix_bot.__version__,
     description='One file library to create matrix bots (https://matrix.org).',
     long_description=matrix_bot.__doc__,
@@ -15,11 +15,12 @@ setup(
     author=matrix_bot.__author__,
     author_email='weimann.th@yahoo.com',
     url='https://github.com/whitie/matrix-bot',
-    py_modules='matrix_bot',
-    scripts=['matrix_bot.py'],
+    py_modules='matrix_pybot',
+    scripts=['matrix_pybot.py'],
     install_requires=['matrix-client'],
     license=matrix_bot.__license__,
     platforms='any',
+    keywords='python matrix matrix.org bot matrix-python',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',

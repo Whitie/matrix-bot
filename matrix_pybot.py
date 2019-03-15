@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Project: matrix-bot
+Project: matrix-pybot
 
 """
 # Examle for an event (type: m.room.message), taken from the matrix.org spec:
